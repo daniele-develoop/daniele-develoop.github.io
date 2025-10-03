@@ -33,60 +33,22 @@
             overflow-x: hidden;
         }
 
-        /* Режим обслуживания - ПРОСТОЙ ВАРИАНТ */
-        .maintenance-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        .maintenance-content {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 60px 40px;
-            border-radius: 20px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .maintenance-title {
-            font-size: 3rem;
-            color: var(--accent);
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        .maintenance-text {
-            font-size: 1.5rem;
-            opacity: 0.9;
-            margin-bottom: 30px;
-        }
-
-        .maintenance-toggle {
+        .admin-link {
             position: fixed;
             top: 20px;
             left: 20px;
             background: var(--accent);
             color: var(--dark);
-            border: none;
-            padding: 12px 20px;
+            padding: 10px 15px;
             border-radius: 25px;
-            cursor: pointer;
+            text-decoration: none;
             font-weight: bold;
-            z-index: 10000;
+            z-index: 1000;
             transition: var(--transition);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
-        .maintenance-toggle:hover {
+        .admin-link:hover {
             transform: scale(1.05);
             background: #ffed4a;
         }
@@ -204,23 +166,6 @@
             font-size: 1.3rem;
             margin-bottom: 20px;
             opacity: 0.9;
-        }
-
-        .typing-text {
-            border-right: 2px solid var(--accent);
-            white-space: nowrap;
-            overflow: hidden;
-            animation: typing 3s steps(20, end), blink-caret 0.75s step-end infinite;
-        }
-
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: var(--accent) }
         }
 
         .skills {
@@ -401,62 +346,6 @@
             transform: translateX(5px);
         }
 
-        /* Achievements & Activities */
-        .achievements-activities {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-
-        .section {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            transition: var(--transition);
-            backdrop-filter: blur(10px);
-        }
-
-        .section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .section h3 {
-            color: var(--accent);
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section ul {
-            list-style-type: none;
-        }
-
-        .section li {
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            padding-left: 25px;
-            transition: var(--transition);
-        }
-
-        .section li:hover {
-            padding-left: 30px;
-        }
-
-        .section li:before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--accent);
-            font-weight: bold;
-        }
-
         /* Contact Form */
         .contact-section {
             background: var(--card-bg);
@@ -531,12 +420,6 @@
             transform: scale(1.02);
         }
 
-        .submit-btn:disabled {
-            background: #a0aec0;
-            cursor: not-allowed;
-            transform: none;
-        }
-
         .form-message {
             padding: 15px;
             border-radius: 10px;
@@ -594,121 +477,6 @@
             opacity: 0.8;
         }
 
-        /* Theme Toggle */
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 100;
-            transition: var(--transition);
-            backdrop-filter: blur(10px);
-        }
-
-        .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: rotate(15deg);
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: transparent;
-            z-index: 1000;
-        }
-
-        .progress-bar {
-            height: 4px;
-            background: var(--accent);
-            width: 0%;
-            transition: width 0.3s;
-        }
-
-        /* Certificates */
-        .certificates {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 50px;
-        }
-
-        .certificate-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            transition: var(--transition);
-            backdrop-filter: blur(10px);
-        }
-
-        .certificate-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .certificate-icon {
-            font-size: 2rem;
-            color: var(--accent);
-            margin-bottom: 15px;
-        }
-
-        /* Timeline */
-        .timeline {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto 50px;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 100%;
-            background: var(--accent);
-        }
-
-        .timeline-item {
-            margin-bottom: 30px;
-            position: relative;
-            width: 50%;
-            padding: 20px;
-        }
-
-        .timeline-item:nth-child(odd) {
-            left: 0;
-            text-align: right;
-        }
-
-        .timeline-item:nth-child(even) {
-            left: 50%;
-        }
-
-        .timeline-content {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-        }
-
-        .timeline-date {
-            font-weight: bold;
-            color: var(--accent);
-            margin-bottom: 10px;
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
             .header {
@@ -721,10 +489,6 @@
                 text-align: center;
             }
             
-            .achievements-activities {
-                grid-template-columns: 1fr;
-            }
-            
             .counter-section {
                 justify-content: center;
             }
@@ -733,49 +497,19 @@
                 grid-template-columns: 1fr;
             }
             
-            .timeline::before {
-                left: 20px;
-            }
-            
-            .timeline-item {
-                width: 100%;
-                left: 0 !important;
-                text-align: left !important;
-                padding-left: 50px;
-            }
-            
             .social-links {
                 flex-direction: column;
                 align-items: center;
-            }
-
-            .maintenance-title {
-                font-size: 2rem;
-            }
-
-            .maintenance-text {
-                font-size: 1.2rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Кнопка переключения режима обслуживания -->
-    <button class="maintenance-toggle" id="maintenanceToggle">
-        <i class="fas fa-tools"></i> Режим обслуживания
-    </button>
+    <a href="admin.html" class="admin-link">
+        <i class="fas fa-cog"></i> Управление
+    </a>
 
-    <!-- Режим обслуживания -->
-    <div class="maintenance-overlay" id="maintenanceOverlay">
-        <div class="maintenance-content">
-            <div class="maintenance-title">Сайт обновляется...</div>
-            <div class="maintenance-text">Мы улучшаем наш сайт для вас!<br>Скоро вернемся!</div>
-        </div>
-    </div>
-
-    <!-- Основной контент -->
-    <div class="container" id="mainContent">
-        <!-- Header -->
+    <div class="container">
         <header class="header fade-in">
             <div class="logo">
                 <i class="fas fa-code"></i>
@@ -784,18 +518,15 @@
             <nav class="nav-links">
                 <a href="#about"><i class="fas fa-user"></i> Обо мне</a>
                 <a href="#projects"><i class="fas fa-project-diagram"></i> Проекты</a>
-                <a href="#certificates"><i class="fas fa-certificate"></i> Сертификаты</a>
-                <a href="#timeline"><i class="fas fa-history"></i> Опыт</a>
                 <a href="#contact"><i class="fas fa-envelope"></i> Контакты</a>
             </nav>
         </header>
 
-        <!-- Hero Section -->
         <section class="hero fade-in" id="about">
             <img src="https://via.placeholder.com/200" alt="Фото профиля" class="profile-image">
             <div class="profile-info">
                 <h1 class="profile-name">Daniele</h1>
-                <p class="profile-title typing-text">Веб-разработчик & UI/UX дизайнер</p>
+                <p class="profile-title">Веб-разработчик & UI/UX дизайнер</p>
                 
                 <div class="skills">
                     <span class="skill-tag">HTML</span>
@@ -803,9 +534,6 @@
                     <span class="skill-tag">JavaScript</span>
                     <span class="skill-tag">React</span>
                     <span class="skill-tag">Node.js</span>
-                    <span class="skill-tag">UI/UX</span>
-                    <span class="skill-tag">Figma</span>
-                    <span class="skill-tag">Git</span>
                 </div>
 
                 <div class="counter-section">
@@ -814,65 +542,49 @@
                         <div class="counter" id="clickCounter">0</div>
                     </div>
                     <button class="reset-btn" onclick="resetCounter()">
-                        <i class="fas fa-redo"></i> Сбросить счётчик
+                        <i class="fas fa-redo"></i> Сбросить
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- Stats Section -->
         <div class="stats">
             <div class="stat-card fade-in">
                 <div class="stat-icon">
                     <i class="fas fa-project-diagram"></i>
                 </div>
-                <div class="stat-number" id="projectsCount">50+</div>
-                <div class="stat-text">Завершенных проектов</div>
+                <div class="stat-number">50+</div>
+                <div class="stat-text">Проектов</div>
             </div>
             <div class="stat-card fade-in">
                 <div class="stat-icon">
                     <i class="fas fa-users"></i>
                 </div>
-                <div class="stat-number" id="clientsCount">30+</div>
-                <div class="stat-text">Довольных клиентов</div>
+                <div class="stat-number">30+</div>
+                <div class="stat-text">Клиентов</div>
             </div>
             <div class="stat-card fade-in">
                 <div class="stat-icon">
                     <i class="fas fa-code-branch"></i>
                 </div>
-                <div class="stat-number" id="experienceCount">3+</div>
+                <div class="stat-number">3+</div>
                 <div class="stat-text">Года опыта</div>
-            </div>
-            <div class="stat-card fade-in">
-                <div class="stat-icon">
-                    <i class="fas fa-award"></i>
-                </div>
-                <div class="stat-number" id="awardsCount">15+</div>
-                <div class="stat-text">Наград и сертификатов</div>
             </div>
         </div>
 
-        <!-- Projects -->
         <section id="projects">
-            <h2 class="section-title">Мои последние проекты</h2>
+            <h2 class="section-title">Мои проекты</h2>
             <div class="projects-grid">
                 <div class="project-card fade-in">
                     <h3>Интернет-магазин</h3>
-                    <p>Полнофункциональный интернет-магазин с системой корзины, фильтрами товаров и интеграцией платежной системы.</p>
+                    <p>Полнофункциональный интернет-магазин с современным дизайном.</p>
                     <a href="#" class="project-link">
                         <i class="fas fa-external-link-alt"></i> Подробнее
                     </a>
                 </div>
                 <div class="project-card fade-in">
                     <h3>Корпоративный сайт</h3>
-                    <p>Современный корпоративный сайт с адаптивным дизайном, системой управления контентом и блогом.</p>
-                    <a href="#" class="project-link">
-                        <i class="fas fa-external-link-alt"></i> Подробнее
-                    </a>
-                </div>
-                <div class="project-card fade-in">
-                    <h3>Мобильное приложение</h3>
-                    <p>Кроссплатформенное мобильное приложение с оффлайн-режимом, push-уведомлениями и аналитикой.</p>
+                    <p>Современный корпоративный сайт с адаптивным дизайном.</p>
                     <a href="#" class="project-link">
                         <i class="fas fa-external-link-alt"></i> Подробнее
                     </a>
@@ -880,59 +592,36 @@
             </div>
         </section>
 
-        <!-- Contact Form -->
         <section class="contact-section fade-in" id="contact">
             <h2 class="section-title">Связаться со мной</h2>
             
-            <form class="contact-form" id="contactForm" action="https://formspree.io/f/your-form-id-here" method="POST">
+            <form class="contact-form" id="contactForm">
                 <div class="form-group">
                     <label for="name"><i class="fas fa-user"></i> Ваше имя:</label>
-                    <input type="text" id="name" name="name" required placeholder="Введите ваше имя">
+                    <input type="text" id="name" name="name" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="email"><i class="fas fa-envelope"></i> Ваш email:</label>
-                    <input type="email" id="email" name="email" required placeholder="your@email.com">
-                </div>
-                
-                <div class="form-group">
-                    <label for="subject"><i class="fas fa-tag"></i> Тема сообщения:</label>
-                    <select id="subject" name="subject" required>
-                        <option value="">Выберите тему</option>
-                        <option value="project">Заказ проекта</option>
-                        <option value="collaboration">Сотрудничество</option>
-                        <option value="consultation">Консультация</option>
-                        <option value="other">Другое</option>
-                    </select>
+                    <label for="email"><i class="fas fa-envelope"></i> Email:</label>
+                    <input type="email" id="email" name="email" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="message"><i class="fas fa-comment"></i> Сообщение:</label>
-                    <textarea id="message" name="message" required placeholder="Опишите ваш проект или задайте вопрос..."></textarea>
+                    <textarea id="message" name="message" required></textarea>
                 </div>
                 
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    <i class="fas fa-paper-plane"></i> Отправить сообщение
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i> Отправить
                 </button>
             </form>
-            
-            <div class="form-message" id="formMessage"></div>
-            
-            <div class="contact-info">
-                <p><i class="fas fa-info-circle"></i> Напишите мне, и я отвечу вам в течение 24 часов!</p>
-            </div>
         </section>
 
-        <!-- Footer -->
         <footer class="footer fade-in">
             <div class="social-links">
                 <a href="#">
                     <i class="fab fa-github"></i>
                     <span>GitHub</span>
-                </a>
-                <a href="#">
-                    <i class="fab fa-vk"></i>
-                    <span>ВКонтакте</span>
                 </a>
                 <a href="#">
                     <i class="fab fa-telegram"></i>
@@ -944,36 +633,30 @@
     </div>
 
     <script>
-        // Режим обслуживания
-        const maintenanceToggle = document.getElementById('maintenanceToggle');
-        const maintenanceOverlay = document.getElementById('maintenanceOverlay');
-        const mainContent = document.getElementById('mainContent');
+        // Счетчик кликов
+        let clickCount = localStorage.getItem('clickCount') || 0;
+        const clickCounter = document.getElementById('clickCounter');
+        
+        clickCounter.textContent = clickCount;
 
-        let maintenanceMode = localStorage.getItem('maintenanceMode') === 'true';
-
-        function updateMaintenanceMode() {
-            if (maintenanceMode) {
-                maintenanceOverlay.style.display = 'flex';
-                mainContent.style.display = 'none';
-                maintenanceToggle.innerHTML = '<i class="fas fa-eye"></i> Показать сайт';
-            } else {
-                maintenanceOverlay.style.display = 'none';
-                mainContent.style.display = 'block';
-                maintenanceToggle.innerHTML = '<i class="fas fa-tools"></i> Режим обслуживания';
-            }
-        }
-
-        maintenanceToggle.addEventListener('click', function() {
-            maintenanceMode = !maintenanceMode;
-            localStorage.setItem('maintenanceMode', maintenanceMode);
-            updateMaintenanceMode();
+        document.addEventListener('click', function() {
+            clickCount++;
+            clickCounter.textContent = clickCount;
+            localStorage.setItem('clickCount', clickCount);
         });
 
-        // Инициализация при загрузке
-        updateMaintenanceMode();
+        function resetCounter() {
+            clickCount = 0;
+            clickCounter.textContent = clickCount;
+            localStorage.setItem('clickCount', clickCount);
+        }
 
-        // Остальной JavaScript код...
-        // Счетчик кликов, форма обратной связи и т.д.
+        // Форма обратной связи
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Сообщение отправлено!');
+            this.reset();
+        });
     </script>
 </body>
 </html>
