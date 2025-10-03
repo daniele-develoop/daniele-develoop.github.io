@@ -28,6 +28,107 @@
             min-height: 100vh;
             color: var(--light);
             line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Экран входа */
+        .login-screen {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .login-icon {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .login-title {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .login-subtitle {
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: left;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .form-group input {
+            padding: 12px 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            transition: var(--transition);
+            color: var(--dark);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.5);
+            transform: scale(1.02);
+        }
+
+        .login-btn {
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background: #ffed4a;
+            transform: scale(1.02);
+        }
+
+        .error-message {
+            color: var(--danger);
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Основной контент (скрыт по умолчанию) */
+        .admin-content {
+            display: none;
+            width: 100%;
         }
 
         .admin-container {
@@ -217,6 +318,28 @@
             font-size: 14px;
         }
 
+        .logout-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logout-btn:hover {
+            transform: scale(1.05);
+            background: #e53e3e;
+        }
+
         @media (max-width: 768px) {
             .file-actions {
                 flex-direction: column;
@@ -235,119 +358,203 @@
     </style>
 </head>
 <body>
-    <div class="admin-container">
-        <div class="admin-header">
-            <a href="index.html" class="back-link">
-                <i class="fas fa-arrow-left"></i> Назад на сайт
-            </a>
-            <h1 class="admin-title">Панель управления сайтом</h1>
-            <p>Управление файлами и настройками вашего портфолио</p>
+    <!-- Экран входа -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-icon">
+            <i class="fas fa-lock"></i>
         </div>
-
-        <div class="stats-panel">
-            <div class="stat-item">
-                <div class="stat-number" id="totalVisits">0</div>
-                <div class="stat-label">Всего посещений</div>
+        <h1 class="login-title">Доступ ограничен</h1>
+        <p class="login-subtitle">Введите пароль для доступа к панели управления</p>
+        
+        <form class="login-form" id="loginForm">
+            <div class="form-group">
+                <label for="password"><i class="fas fa-key"></i> Пароль:</label>
+                <input type="password" id="password" name="password" required placeholder="Введите пароль доступа">
             </div>
-            <div class="stat-item">
-                <div class="stat-number" id="activeFiles">2</div>
-                <div class="stat-label">Активных файлов</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="lastUpdate">Сегодня</div>
-                <div class="stat-label">Последнее обновление</div>
-            </div>
+            
+            <button type="submit" class="login-btn">
+                <i class="fas fa-sign-in-alt"></i> Войти
+            </button>
+        </form>
+        
+        <div class="error-message" id="errorMessage">
+            <i class="fas fa-exclamation-triangle"></i> Неверный пароль!
         </div>
+    </div>
 
-        <div class="quick-actions">
-            <h3><i class="fas fa-bolt"></i> Быстрые действия</h3>
-            <div class="action-buttons">
-                <button class="btn btn-primary" onclick="toggleMaintenance()">
-                    <i class="fas fa-tools"></i> Режим обслуживания
-                </button>
-                <button class="btn btn-secondary" onclick="resetStats()">
-                    <i class="fas fa-redo"></i> Сбросить статистику
-                </button>
-                <button class="btn btn-primary" onclick="backupSite()">
-                    <i class="fas fa-download"></i> Создать бэкап
-                </button>
+    <!-- Основной контент панели управления -->
+    <div class="admin-content" id="adminContent">
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Выйти
+        </button>
+
+        <div class="admin-container">
+            <div class="admin-header">
+                <a href="index.html" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Назад на сайт
+                </a>
+                <h1 class="admin-title">Панель управления сайтом</h1>
+                <p>Управление файлами и настройками вашего портфолио</p>
             </div>
-        </div>
 
-        <div class="file-manager">
-            <div class="file-card">
-                <div class="file-icon">
-                    <i class="fas fa-file-code"></i>
+            <div class="stats-panel">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalVisits">0</div>
+                    <div class="stat-label">Всего посещений</div>
                 </div>
-                <h3 class="file-name">index.html</h3>
-                <div class="file-description">
-                    Главная страница сайта
-                    <span class="status-indicator status-active">Активен</span>
+                <div class="stat-item">
+                    <div class="stat-number" id="activeFiles">2</div>
+                    <div class="stat-label">Активных файлов</div>
                 </div>
-                <div class="file-actions">
-                    <a href="index.html" class="btn btn-primary" target="_blank">
-                        <i class="fas fa-eye"></i> Просмотр
-                    </a>
-                    <button class="btn btn-secondary" onclick="editFile('index.html')">
-                        <i class="fas fa-edit"></i> Редактировать
+                <div class="stat-item">
+                    <div class="stat-number" id="lastUpdate">Сегодня</div>
+                    <div class="stat-label">Последнее обновление</div>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <h3><i class="fas fa-bolt"></i> Быстрые действия</h3>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="toggleMaintenance()">
+                        <i class="fas fa-tools"></i> Режим обслуживания
+                    </button>
+                    <button class="btn btn-secondary" onclick="resetStats()">
+                        <i class="fas fa-redo"></i> Сбросить статистику
+                    </button>
+                    <button class="btn btn-primary" onclick="backupSite()">
+                        <i class="fas fa-download"></i> Создать бэкап
                     </button>
                 </div>
             </div>
 
-            <div class="file-card">
-                <div class="file-icon">
-                    <i class="fas fa-cogs"></i>
+            <div class="file-manager">
+                <div class="file-card">
+                    <div class="file-icon">
+                        <i class="fas fa-file-code"></i>
+                    </div>
+                    <h3 class="file-name">index.html</h3>
+                    <div class="file-description">
+                        Главная страница сайта
+                        <span class="status-indicator status-active">Активен</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="index.html" class="btn btn-primary" target="_blank">
+                            <i class="fas fa-eye"></i> Просмотр
+                        </a>
+                        <button class="btn btn-secondary" onclick="editFile('index.html')">
+                            <i class="fas fa-edit"></i> Редактировать
+                        </button>
+                    </div>
                 </div>
-                <h3 class="file-name">admin.html</h3>
-                <div class="file-description">
-                    Панель управления
-                    <span class="status-indicator status-active">Активен</span>
-                </div>
-                <div class="file-actions">
-                    <a href="admin.html" class="btn btn-primary">
-                        <i class="fas fa-eye"></i> Текущая
-                    </a>
-                    <button class="btn btn-secondary" onclick="editFile('admin.html')">
-                        <i class="fas fa-edit"></i> Редактировать
-                    </button>
-                </div>
-            </div>
 
-            <div class="file-card">
-                <div class="file-icon">
-                    <i class="fas fa-palette"></i>
+                <div class="file-card">
+                    <div class="file-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3 class="file-name">admin.html</h3>
+                    <div class="file-description">
+                        Панель управления
+                        <span class="status-indicator status-active">Активен</span>
+                    </div>
+                    <div class="file-actions">
+                        <a href="admin.html" class="btn btn-primary">
+                            <i class="fas fa-eye"></i> Текущая
+                        </a>
+                        <button class="btn btn-secondary" onclick="editFile('admin.html')">
+                            <i class="fas fa-edit"></i> Редактировать
+                        </button>
+                    </div>
                 </div>
-                <h3 class="file-name">style.css</h3>
-                <div class="file-description">
-                    Стили сайта
-                    <span class="status-indicator status-inactive">Неактивен</span>
-                </div>
-                <div class="file-actions">
-                    <button class="btn btn-primary" onclick="createFile('style.css')">
-                        <i class="fas fa-plus"></i> Создать
-                    </button>
-                </div>
-            </div>
 
-            <div class="file-card">
-                <div class="file-icon">
-                    <i class="fas fa-code"></i>
+                <div class="file-card">
+                    <div class="file-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3 class="file-name">style.css</h3>
+                    <div class="file-description">
+                        Стили сайта
+                        <span class="status-indicator status-inactive">Неактивен</span>
+                    </div>
+                    <div class="file-actions">
+                        <button class="btn btn-primary" onclick="createFile('style.css')">
+                            <i class="fas fa-plus"></i> Создать
+                        </button>
+                    </div>
                 </div>
-                <h3 class="file-name">script.js</h3>
-                <div class="file-description">
-                    JavaScript файл
-                    <span class="status-indicator status-inactive">Неактивен</span>
-                </div>
-                <div class="file-actions">
-                    <button class="btn btn-primary" onclick="createFile('script.js')">
-                        <i class="fas fa-plus"></i> Создать
-                    </button>
+
+                <div class="file-card">
+                    <div class="file-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3 class="file-name">script.js</h3>
+                    <div class="file-description">
+                        JavaScript файл
+                        <span class="status-indicator status-inactive">Неактивен</span>
+                    </div>
+                    <div class="file-actions">
+                        <button class="btn btn-primary" onclick="createFile('script.js')">
+                            <i class="fas fa-plus"></i> Создать
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // ПАРОЛЬ ДОСТУПА - замените на свой пароль
+        const ADMIN_PASSWORD = "daniele123"; // 🔑 ЗАМЕНИТЕ ЭТОТ ПАРОЛЬ!
+
+        // Проверка авторизации
+        function checkAuth() {
+            return localStorage.getItem('adminAuthenticated') === 'true';
+        }
+
+        // Функция входа
+        function login(password) {
+            if (password === ADMIN_PASSWORD) {
+                localStorage.setItem('adminAuthenticated', 'true');
+                showAdminPanel();
+                return true;
+            }
+            return false;
+        }
+
+        // Функция выхода
+        function logout() {
+            localStorage.removeItem('adminAuthenticated');
+            showLoginScreen();
+        }
+
+        // Показать экран входа
+        function showLoginScreen() {
+            document.getElementById('loginScreen').style.display = 'block';
+            document.getElementById('adminContent').style.display = 'none';
+            document.getElementById('password').value = '';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        // Показать панель управления
+        function showAdminPanel() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('adminContent').style.display = 'block';
+            loadStats();
+        }
+
+        // Обработка формы входа
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            
+            if (login(password)) {
+                document.getElementById('errorMessage').style.display = 'none';
+            } else {
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+            }
+        });
+
         // Загрузка статистики
         function loadStats() {
             const visits = localStorage.getItem('siteVisits') || '0';
@@ -386,15 +593,31 @@
             alert(`Создание файла ${filename} - используйте "Add file" на GitHub`);
         }
 
-        // Инициализация
+        // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
-            loadStats();
+            if (checkAuth()) {
+                showAdminPanel();
+            } else {
+                showLoginScreen();
+            }
             
             // Обновляем статистику посещений
             let visits = parseInt(localStorage.getItem('siteVisits') || '0');
             visits++;
             localStorage.setItem('siteVisits', visits.toString());
-            document.getElementById('totalVisits').textContent = visits;
+        });
+
+        // Защита от копирования пароля (базовая)
+        document.addEventListener('contextmenu', function(e) {
+            if (e.target.type === 'password') {
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.target.type === 'password' && (e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'C')) {
+                e.preventDefault();
+            }
         });
     </script>
 </body>
