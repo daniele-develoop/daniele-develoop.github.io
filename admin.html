@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Управление сайтом - Daniele</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Подключаем редактор кода CodeMirror -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
     <style>
         :root {
             --primary: #2d3748;
@@ -28,13 +36,23 @@
             min-height: 100vh;
             color: var(--light);
             line-height: 1.6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         /* Экран входа */
         .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .login-box {
             background: rgba(255, 255, 255, 0.1);
             padding: 40px;
             border-radius: 20px;
@@ -88,7 +106,7 @@
             background: rgba(255, 255, 255, 0.9);
             font-size: 16px;
             transition: var(--transition);
-            color: var(--dark);
+            color: var(--primary);
         }
 
         .form-group input:focus {
@@ -125,16 +143,15 @@
             display: none;
         }
 
-        /* Основной контент (скрыт по умолчанию) */
+        /* Основной контент */
         .admin-content {
             display: none;
-            width: 100%;
+            padding: 20px;
         }
 
         .admin-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
         }
 
         .admin-header {
@@ -169,51 +186,48 @@
             background: #ffed4a;
         }
 
-        .file-manager {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .file-card {
-            background: rgba(255, 255, 255, 0.1);
+        /* Редактор кода */
+        .editor-container {
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
-            padding: 25px;
+            padding: 20px;
+            margin-bottom: 30px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: var(--transition);
         }
 
-        .file-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-        }
-
-        .file-icon {
-            font-size: 3rem;
-            color: var(--accent);
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .file-name {
-            font-size: 1.4rem;
-            color: var(--accent);
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .file-description {
-            text-align: center;
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
-            opacity: 0.8;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
-        .file-actions {
+        .editor-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .editor-title h3 {
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        .file-badge {
+            background: var(--success);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+
+        .editor-actions {
             display: flex;
             gap: 10px;
-            justify-content: center;
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -223,10 +237,11 @@
             cursor: pointer;
             transition: var(--transition);
             font-weight: bold;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
             text-decoration: none;
+            font-size: 14px;
         }
 
         .btn-primary {
@@ -234,7 +249,7 @@
             color: var(--primary);
         }
 
-        .btn-secondary {
+        .btn-success {
             background: var(--success);
             color: white;
         }
@@ -244,57 +259,35 @@
             color: white;
         }
 
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
         .btn:hover {
             transform: scale(1.05);
         }
 
-        .status-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            margin-left: 10px;
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
 
-        .status-active {
-            background: var(--success);
-            color: white;
-        }
-
-        .status-inactive {
-            background: var(--danger);
-            color: white;
-        }
-
-        .quick-actions {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 25px;
-            backdrop-filter: blur(10px);
-            margin-bottom: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .quick-actions h3 {
-            color: var(--accent);
+        /* Поле для редактора */
+        .CodeMirror {
+            height: 500px;
+            border-radius: 10px;
+            font-size: 14px;
             margin-bottom: 20px;
-            text-align: center;
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
+        /* Статистика */
         .stats-panel {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
         .stat-item {
@@ -318,6 +311,59 @@
             font-size: 14px;
         }
 
+        /* Файлы */
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .file-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+        }
+
+        .file-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .file-card.active {
+            border: 2px solid var(--accent);
+        }
+
+        .file-icon {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .file-name {
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+            text-align: center;
+            word-break: break-all;
+        }
+
+        .file-info {
+            font-size: 12px;
+            opacity: 0.7;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
         .logout-btn {
             position: fixed;
             top: 20px;
@@ -333,6 +379,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            z-index: 100;
         }
 
         .logout-btn:hover {
@@ -340,14 +387,32 @@
             background: #e53e3e;
         }
 
+        .save-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+
+        .save-notification.show {
+            transform: translateX(0);
+        }
+
         @media (max-width: 768px) {
-            .file-actions {
+            .editor-header {
                 flex-direction: column;
+                align-items: stretch;
             }
             
-            .action-buttons {
+            .file-actions {
                 flex-direction: column;
-                align-items: center;
             }
             
             .btn {
@@ -360,29 +425,31 @@
 <body>
     <!-- Экран входа -->
     <div class="login-screen" id="loginScreen">
-        <div class="login-icon">
-            <i class="fas fa-lock"></i>
-        </div>
-        <h1 class="login-title">Доступ ограничен</h1>
-        <p class="login-subtitle">Введите пароль для доступа к панели управления</p>
-        
-        <form class="login-form" id="loginForm">
-            <div class="form-group">
-                <label for="password"><i class="fas fa-key"></i> Пароль:</label>
-                <input type="password" id="password" name="password" required placeholder="Введите пароль доступа">
+        <div class="login-box">
+            <div class="login-icon">
+                <i class="fas fa-lock"></i>
             </div>
+            <h1 class="login-title">Доступ ограничен</h1>
+            <p class="login-subtitle">Введите пароль для доступа к панели управления</p>
             
-            <button type="submit" class="login-btn">
-                <i class="fas fa-sign-in-alt"></i> Войти
-            </button>
-        </form>
-        
-        <div class="error-message" id="errorMessage">
-            <i class="fas fa-exclamation-triangle"></i> Неверный пароль!
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-key"></i> Пароль:</label>
+                    <input type="password" id="password" name="password" required placeholder="Введите пароль доступа">
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Войти
+                </button>
+            </form>
+            
+            <div class="error-message" id="errorMessage">
+                <i class="fas fa-exclamation-triangle"></i> Неверный пароль!
+            </div>
         </div>
     </div>
 
-    <!-- Основной контент панели управления -->
+    <!-- Основной контент -->
     <div class="admin-content" id="adminContent">
         <button class="logout-btn" onclick="logout()">
             <i class="fas fa-sign-out-alt"></i> Выйти
@@ -390,127 +457,301 @@
 
         <div class="admin-container">
             <div class="admin-header">
-                <a href="index.html" class="back-link">
-                    <i class="fas fa-arrow-left"></i> Назад на сайт
+                <a href="index.html" class="back-link" target="_blank">
+                    <i class="fas fa-arrow-left"></i> На сайт
                 </a>
-                <h1 class="admin-title">Панель управления сайтом</h1>
-                <p>Управление файлами и настройками вашего портфолио</p>
+                <h1 class="admin-title">Редактор кода</h1>
+                <p>Выберите файл для редактирования или создайте новый</p>
             </div>
 
+            <!-- Статистика -->
             <div class="stats-panel">
                 <div class="stat-item">
                     <div class="stat-number" id="totalVisits">0</div>
-                    <div class="stat-label">Всего посещений</div>
+                    <div class="stat-label">Посещений</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number" id="activeFiles">2</div>
-                    <div class="stat-label">Активных файлов</div>
+                    <div class="stat-number" id="filesCount">2</div>
+                    <div class="stat-label">Файлов</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number" id="lastUpdate">Сегодня</div>
-                    <div class="stat-label">Последнее обновление</div>
+                    <div class="stat-number" id="lastEdit">-</div>
+                    <div class="stat-label">Последнее изменение</div>
                 </div>
             </div>
 
-            <div class="quick-actions">
-                <h3><i class="fas fa-bolt"></i> Быстрые действия</h3>
-                <div class="action-buttons">
-                    <button class="btn btn-primary" onclick="toggleMaintenance()">
-                        <i class="fas fa-tools"></i> Режим обслуживания
-                    </button>
-                    <button class="btn btn-secondary" onclick="resetStats()">
-                        <i class="fas fa-redo"></i> Сбросить статистику
-                    </button>
-                    <button class="btn btn-primary" onclick="backupSite()">
-                        <i class="fas fa-download"></i> Создать бэкап
-                    </button>
+            <!-- Редактор кода -->
+            <div class="editor-container" id="editorContainer" style="display: none;">
+                <div class="editor-header">
+                    <div class="editor-title">
+                        <h3 id="currentFileName">Редактор</h3>
+                        <span class="file-badge" id="fileStatus">Не сохранено</span>
+                    </div>
+                    <div class="editor-actions">
+                        <button class="btn btn-secondary" onclick="closeEditor()">
+                            <i class="fas fa-times"></i> Закрыть
+                        </button>
+                        <button class="btn btn-success" onclick="saveFile()" id="saveBtn">
+                            <i class="fas fa-save"></i> Сохранить
+                        </button>
+                    </div>
                 </div>
+                <textarea id="codeEditor"></textarea>
             </div>
 
-            <div class="file-manager">
-                <div class="file-card">
-                    <div class="file-icon">
-                        <i class="fas fa-file-code"></i>
-                    </div>
-                    <h3 class="file-name">index.html</h3>
-                    <div class="file-description">
-                        Главная страница сайта
-                        <span class="status-indicator status-active">Активен</span>
-                    </div>
-                    <div class="file-actions">
-                        <a href="index.html" class="btn btn-primary" target="_blank">
-                            <i class="fas fa-eye"></i> Просмотр
-                        </a>
-                        <button class="btn btn-secondary" onclick="editFile('index.html')">
-                            <i class="fas fa-edit"></i> Редактировать
-                        </button>
-                    </div>
-                </div>
-
-                <div class="file-card">
-                    <div class="file-icon">
-                        <i class="fas fa-cogs"></i>
-                    </div>
-                    <h3 class="file-name">admin.html</h3>
-                    <div class="file-description">
-                        Панель управления
-                        <span class="status-indicator status-active">Активен</span>
-                    </div>
-                    <div class="file-actions">
-                        <a href="admin.html" class="btn btn-primary">
-                            <i class="fas fa-eye"></i> Текущая
-                        </a>
-                        <button class="btn btn-secondary" onclick="editFile('admin.html')">
-                            <i class="fas fa-edit"></i> Редактировать
-                        </button>
-                    </div>
-                </div>
-
-                <div class="file-card">
-                    <div class="file-icon">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <h3 class="file-name">style.css</h3>
-                    <div class="file-description">
-                        Стили сайта
-                        <span class="status-indicator status-inactive">Неактивен</span>
-                    </div>
-                    <div class="file-actions">
-                        <button class="btn btn-primary" onclick="createFile('style.css')">
-                            <i class="fas fa-plus"></i> Создать
-                        </button>
-                    </div>
-                </div>
-
-                <div class="file-card">
-                    <div class="file-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h3 class="file-name">script.js</h3>
-                    <div class="file-description">
-                        JavaScript файл
-                        <span class="status-indicator status-inactive">Неактивен</span>
-                    </div>
-                    <div class="file-actions">
-                        <button class="btn btn-primary" onclick="createFile('script.js')">
-                            <i class="fas fa-plus"></i> Создать
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <!-- Список файлов -->
+            <div class="files-grid" id="filesList"></div>
         </div>
     </div>
 
-    <script>
-        // ПАРОЛЬ ДОСТУПА - замените на свой пароль
-        const ADMIN_PASSWORD = "daniele123"; // 🔑 ЗАМЕНИТЕ ЭТОТ ПАРОЛЬ!
+    <!-- Уведомление о сохранении -->
+    <div class="save-notification" id="saveNotification">
+        <i class="fas fa-check-circle"></i> Файл сохранен!
+    </div>
 
-        // Проверка авторизации
+    <script>
+        // ПАРОЛЬ ДОСТУПА - установи свой пароль
+        const ADMIN_PASSWORD = "daniele123"; // 🔑 ЗАМЕНИ НА СВОЙ ПАРОЛЬ!
+
+        // Хранилище файлов
+        let files = {};
+        let currentFile = null;
+        let editor = null;
+        let fileContents = {};
+
+        // Загрузка файлов при старте
+        function loadFiles() {
+            // Загружаем сохраненные файлы из localStorage
+            const saved = localStorage.getItem('siteFiles');
+            if (saved) {
+                files = JSON.parse(saved);
+            } else {
+                // Начальные файлы
+                files = {
+                    'index.html': {
+                        name: 'index.html',
+                        content: `<!DOCTYPE html>
+<html>
+<head>
+    <title>Мой сайт</title>
+</head>
+<body>
+    <h1>Привет, мир!</h1>
+</body>
+</html>`,
+                        type: 'html',
+                        created: new Date().toISOString()
+                    },
+                    'admin.html': {
+                        name: 'admin.html',
+                        content: document.documentElement.outerHTML,
+                        type: 'html',
+                        created: new Date().toISOString()
+                    }
+                };
+                saveFiles();
+            }
+            renderFilesList();
+        }
+
+        // Сохранение файлов
+        function saveFiles() {
+            localStorage.setItem('siteFiles', JSON.stringify(files));
+            updateStats();
+        }
+
+        // Отображение списка файлов
+        function renderFilesList() {
+            const container = document.getElementById('filesList');
+            container.innerHTML = '';
+            
+            Object.values(files).forEach(file => {
+                const card = document.createElement('div');
+                card.className = `file-card ${currentFile === file.name ? 'active' : ''}`;
+                
+                const icon = file.name.endsWith('.html') ? 'fa-file-code' : 
+                            file.name.endsWith('.css') ? 'fa-palette' : 
+                            file.name.endsWith('.js') ? 'fa-code' : 'fa-file';
+                
+                const date = new Date(file.created).toLocaleString();
+                
+                card.innerHTML = `
+                    <div class="file-icon">
+                        <i class="fas ${icon}"></i>
+                    </div>
+                    <h3 class="file-name">${file.name}</h3>
+                    <div class="file-info">Создан: ${date}</div>
+                    <div class="file-actions">
+                        <button class="btn btn-primary" onclick="editFile('${file.name}')">
+                            <i class="fas fa-edit"></i> Редактировать
+                        </button>
+                        <button class="btn btn-secondary" onclick="previewFile('${file.name}')">
+                            <i class="fas fa-eye"></i> Просмотр
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteFile('${file.name}')">
+                            <i class="fas fa-trash"></i> Удалить
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Кнопка создания нового файла
+            const newCard = document.createElement('div');
+            newCard.className = 'file-card';
+            newCard.innerHTML = `
+                <div class="file-icon">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <h3 class="file-name">Новый файл</h3>
+                <div class="file-info">Создайте новый HTML, CSS или JS файл</div>
+                <div class="file-actions">
+                    <button class="btn btn-success" onclick="createNewFile()">
+                        <i class="fas fa-plus"></i> Создать
+                    </button>
+                </div>
+            `;
+            container.appendChild(newCard);
+        }
+
+        // Создание нового файла
+        function createNewFile() {
+            const name = prompt('Введите имя файла (например: style.css или script.js):');
+            if (!name) return;
+            
+            if (files[name]) {
+                alert('Файл с таким именем уже существует!');
+                return;
+            }
+
+            let content = '';
+            if (name.endsWith('.html')) {
+                content = '<!DOCTYPE html>\n<html>\n<head>\n    <title>Новая страница</title>\n</head>\n<body>\n    \n</body>\n</html>';
+            } else if (name.endsWith('.css')) {
+                content = '/* Стили для сайта */\n\nbody {\n    margin: 0;\n    padding: 0;\n}';
+            } else if (name.endsWith('.js')) {
+                content = '// JavaScript код\n\nconsole.log("Скрипт загружен");';
+            }
+
+            files[name] = {
+                name: name,
+                content: content,
+                type: name.split('.').pop(),
+                created: new Date().toISOString()
+            };
+            
+            saveFiles();
+            renderFilesList();
+            editFile(name);
+        }
+
+        // Редактирование файла
+        function editFile(filename) {
+            currentFile = filename;
+            const file = files[filename];
+            
+            document.getElementById('editorContainer').style.display = 'block';
+            document.getElementById('currentFileName').textContent = filename;
+            
+            if (!editor) {
+                // Создаем редактор
+                editor = CodeMirror.fromTextArea(document.getElementById('codeEditor'), {
+                    lineNumbers: true,
+                    mode: file.type === 'html' ? 'htmlmixed' : 
+                          file.type === 'css' ? 'css' : 'javascript',
+                    theme: 'monokai',
+                    autoCloseTags: true,
+                    autoCloseBrackets: true,
+                    lineWrapping: true,
+                    indentUnit: 4,
+                    tabSize: 4
+                });
+                
+                editor.on('change', function() {
+                    document.getElementById('fileStatus').textContent = '⚠ Не сохранено';
+                });
+            } else {
+                editor.setOption('mode', file.type === 'html' ? 'htmlmixed' : 
+                                        file.type === 'css' ? 'css' : 'javascript');
+            }
+            
+            editor.setValue(file.content);
+            document.getElementById('fileStatus').textContent = '📝 Редактирование';
+            
+            // Прокрутка к редактору
+            document.getElementById('editorContainer').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Сохранение файла
+        function saveFile() {
+            if (!currentFile || !editor) return;
+            
+            const content = editor.getValue();
+            files[currentFile].content = content;
+            files[currentFile].modified = new Date().toISOString();
+            
+            saveFiles();
+            
+            // Показываем уведомление
+            document.getElementById('fileStatus').textContent = '✓ Сохранено';
+            const notification = document.getElementById('saveNotification');
+            notification.classList.add('show');
+            setTimeout(() => notification.classList.remove('show'), 2000);
+            
+            // Обновляем статистику
+            document.getElementById('lastEdit').textContent = new Date().toLocaleTimeString();
+        }
+
+        // Просмотр файла
+        function previewFile(filename) {
+            const file = files[filename];
+            if (filename.endsWith('.html')) {
+                // Открываем в новой вкладке
+                const win = window.open('', '_blank');
+                win.document.write(file.content);
+            } else {
+                alert('Предпросмотр доступен только для HTML файлов');
+            }
+        }
+
+        // Удаление файла
+        function deleteFile(filename) {
+            if (filename === 'admin.html') {
+                alert('Нельзя удалить файл админки!');
+                return;
+            }
+            
+            if (confirm(`Удалить файл ${filename}?`)) {
+                delete files[filename];
+                saveFiles();
+                
+                if (currentFile === filename) {
+                    closeEditor();
+                }
+                
+                renderFilesList();
+            }
+        }
+
+        // Закрыть редактор
+        function closeEditor() {
+            document.getElementById('editorContainer').style.display = 'none';
+            currentFile = null;
+        }
+
+        // Обновление статистики
+        function updateStats() {
+            document.getElementById('totalVisits').textContent = 
+                localStorage.getItem('siteVisits') || '0';
+            document.getElementById('filesCount').textContent = 
+                Object.keys(files).length;
+        }
+
+        // Функции входа/выхода
         function checkAuth() {
             return localStorage.getItem('adminAuthenticated') === 'true';
         }
 
-        // Функция входа
         function login(password) {
             if (password === ADMIN_PASSWORD) {
                 localStorage.setItem('adminAuthenticated', 'true');
@@ -520,28 +761,20 @@
             return false;
         }
 
-        // Функция выхода
         function logout() {
             localStorage.removeItem('adminAuthenticated');
-            showLoginScreen();
-        }
-
-        // Показать экран входа
-        function showLoginScreen() {
-            document.getElementById('loginScreen').style.display = 'block';
+            document.getElementById('loginScreen').style.display = 'flex';
             document.getElementById('adminContent').style.display = 'none';
-            document.getElementById('password').value = '';
-            document.getElementById('errorMessage').style.display = 'none';
         }
 
-        // Показать панель управления
         function showAdminPanel() {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('adminContent').style.display = 'block';
-            loadStats();
+            loadFiles();
+            updateStats();
         }
 
-        // Обработка формы входа
+        // Обработка входа
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const password = document.getElementById('password').value;
@@ -551,63 +784,22 @@
             } else {
                 document.getElementById('errorMessage').style.display = 'block';
                 document.getElementById('password').value = '';
-                document.getElementById('password').focus();
             }
         });
 
-        // Загрузка статистики
-        function loadStats() {
-            const visits = localStorage.getItem('siteVisits') || '0';
-            document.getElementById('totalVisits').textContent = visits;
-            
-            const lastUpdate = localStorage.getItem('lastUpdate') || 'Сегодня';
-            document.getElementById('lastUpdate').textContent = lastUpdate;
-        }
-
-        // Функции управления
-        function toggleMaintenance() {
-            const maintenanceMode = localStorage.getItem('maintenanceMode') === 'true';
-            localStorage.setItem('maintenanceMode', !maintenanceMode);
-            alert(`Режим обслуживания ${!maintenanceMode ? 'включен' : 'выключен'}`);
-        }
-
-        function resetStats() {
-            if (confirm('Вы уверены, что хотите сбросить всю статистику?')) {
-                localStorage.removeItem('siteVisits');
-                localStorage.removeItem('clickCount');
-                localStorage.removeItem('lastUpdate');
-                loadStats();
-                alert('Статистика сброшена!');
-            }
-        }
-
-        function backupSite() {
-            alert('Функция бэкапа будет доступна в следующем обновлении!');
-        }
-
-        function editFile(filename) {
-            alert(`Редактирование файла ${filename} - откройте файл в редакторе кода на GitHub`);
-        }
-
-        function createFile(filename) {
-            alert(`Создание файла ${filename} - используйте "Add file" на GitHub`);
-        }
-
-        // Инициализация при загрузке
+        // Инициализация
         document.addEventListener('DOMContentLoaded', function() {
             if (checkAuth()) {
                 showAdminPanel();
-            } else {
-                showLoginScreen();
             }
             
-            // Обновляем статистику посещений
+            // Счетчик посещений
             let visits = parseInt(localStorage.getItem('siteVisits') || '0');
             visits++;
             localStorage.setItem('siteVisits', visits.toString());
         });
 
-        // Защита от копирования пароля (базовая)
+        // Защита от копирования пароля
         document.addEventListener('contextmenu', function(e) {
             if (e.target.type === 'password') {
                 e.preventDefault();
@@ -615,7 +807,7 @@
         });
 
         document.addEventListener('keydown', function(e) {
-            if (e.target.type === 'password' && (e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'C')) {
+            if (e.target.type === 'password' && (e.ctrlKey || e.metaKey) && e.key === 'c') {
                 e.preventDefault();
             }
         });
